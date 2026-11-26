@@ -242,7 +242,28 @@ function goHome(){document.documentElement.classList.remove('island-open');docum
 function togglePanel(){const page=document.getElementById('page');page.classList.toggle('expanded');const btn=document.getElementById('expandBtn');btn.textContent=page.classList.contains('expanded')?'✕ Exit reading mode':'⤢ Read full screen'}
 document.getElementById('expandBtn').addEventListener('click',togglePanel);
 function openPage(key){const d=content[key];if(!d)return;const page=document.getElementById('page');page.classList.remove('expanded');document.getElementById('expandBtn').textContent='⤢ Read full screen';page.style.display='block';page.classList.add('show');document.getElementById('pageContent').innerHTML=`<div class="kicker">${d.k}</div><h2>${d.t}</h2><p class="lead">${d.l}</p><div class="cards">${d.c.map((c,i)=>`<article class="card expandable-card"><button class="card-toggle" type="button" aria-expanded="false" aria-controls="detail-${key}-${i}"><span><span class="num">${c[0]}</span><h3>${c[1]}</h3><span class="card-summary">${c[2]}</span><span class="card-tags">${c[3].split('•').map(x=>`<span class="tag">${x.trim()}</span>`).join('')}</span></span><span class="card-chevron" aria-hidden="true">＋</span></button><div class="card-detail" id="detail-${key}-${i}" hidden><p>${c[4]||c[2]}</p>${key==='projects'&&i===2?seaProjectGallery():''}</div></article>`).join('')}</div>`;page.querySelectorAll('.card-toggle').forEach(btn=>btn.addEventListener('click',()=>{const expanded=btn.getAttribute('aria-expanded')==='true';btn.setAttribute('aria-expanded',String(!expanded));btn.querySelector('.card-chevron').textContent=expanded?'＋':'−';btn.closest('.card').querySelector('.card-detail').hidden=expanded}));transitioning=false}
-function seaProjectGallery(){const media=[['Ship Creation.png','My pirate ship model in Blender'],['Screenshot 2026-05-15 131111.png','Ocean surface during development'],['Screenshot 2026-05-15 153327.png','Water material node setup'],['Screenshot 2026-05-15 140033.png','Water texture settings'],['Screenshot 2026-05-15 140027.png','Displacement settings'],['Screenshot 2026-05-15 131340.png','Modifier and displacement setup'],['Screenshot 2026-05-15 131438.png','Animation graph and keyframes'],['Screenshot 2026-05-15 131433.png','Animation curve detail'],['Screenshot 2026-05-15 140004.png','Ocean surface geometry'],['Screenshot 2026-05-15 140014.png','Object and scene work'],['Screenshot 2026-05-15 140017.png','Blender object setup'],['Screenshot 2026-05-15 140557.png','Scene object organisation'],['Screenshot 2026-05-15 134604.png','Sail object in the ship hierarchy'],['Screenshot 2026-05-15 141629.png','Blender settings during development'],['Screenshot 2026-05-15 145813.png','Object setup in the scene'],['Screenshot 2026-05-15 145827.png','Additional Blender settings'],['Ship refence.png','Reference image used for the pirate ship']];return `<h4 class="sea-media-heading">Floating at Sea · Development gallery</h4><div class="sea-gallery">${media.map(([file,caption])=>`<figure><a href="./assets/sea-project/${encodeURIComponent(file)}" target="_blank" rel="noopener"><img src="./assets/sea-project/${encodeURIComponent(file)}" alt="${caption}" loading="lazy"></a><figcaption>${caption}</figcaption></figure>`).join('')}</div><video class="sea-video" controls preload="metadata"><source src="./assets/sea-project/Water%20video%20MK1.mp4" type="video/mp4">Your browser does not support the video element.</video><p>Original development screenshots and water test video. Images are displayed from the supplied files without editing.</p>`}
+function seaProjectGallery(){
+  const media=[
+    ['Ship Creation.png','My pirate ship model in Blender'],
+    ['Ship refence.png','Reference image for the pirate ship'],
+    ['AnimationCurve.png','Animation curve'],
+    ['BoatShrinkwrap.png','Ship shrinkwrap setup'],
+    ['CannonParticleBase.png','Cannon particle base'],
+    ['Clouds.png','Cloud texture and setup'],
+    ['Displace.png','Displacement settings'],
+    ['Fluid.png','Fluid setup'],
+    ['FluidSettings.png','Fluid settings'],
+    ['Icosphere.png','Icosphere object setup'],
+    ['ParticleBoxes.png','Particle box setup'],
+    ['ShipSails.png','Ship sails hierarchy'],
+    ['ShrinkwrapAnim.png','Shrinkwrap animation'],
+    ['StartOfCannonAnim.png','Cannon animation setup'],
+    ['Texture.png','Water texture setup'],
+    ['WaveStuff.png','Wave and ocean setup']
+  ];
+  const base='./assets/sea-project/';
+  return `<h4 class="sea-media-heading">Floating at Sea · Development gallery</h4><div class="sea-gallery">${media.map(([file,caption])=>{const url=base+encodeURIComponent(file);return `<figure><a href="${url}" target="_blank" rel="noopener"><img src="${url}" alt="${caption}" loading="lazy" onerror="this.closest('figure').remove()"></a><figcaption>${caption}</figcaption></figure>`}).join('')}</div><video class="sea-video" controls preload="metadata"><source src="${base}Water%20video%20MK1.mp4" type="video/mp4">Your browser does not support the video element.</video><p>Original development screenshots and water test video. Images are displayed from the supplied files without editing.</p>`
+}
 window.openPage=(key)=>{if(key==='about'||key==='projects'){const found=islands.find(i=>i.userData.key===key);if(found)flyTo(found)}};
 window.goHome=goHome;
 const content=window.PORTFOLIO_CONTENT;
