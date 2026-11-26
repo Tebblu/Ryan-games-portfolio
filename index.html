@@ -51,6 +51,13 @@ h2{font:400 clamp(44px,6vw,76px)/1 Georgia,serif;letter-spacing:-.05em;margin:13
 @keyframes load{from{transform:scaleX(.2);opacity:.3}to{transform:scaleX(1);opacity:1}}
 @media(max-width:700px){body{min-height:calc(390px + 88vh + 42px)}header{padding:13px}.brand{font-size:9px}.pill{font-size:9px;padding:8px 10px}.hero{min-height:390px;width:calc(100vw - 24px);padding:112px 12px 28px}.hero p{font-size:12px}h1{font-size:clamp(37px,9vw,48px);line-height:1.08}.hint{font-size:9px;margin-top:10px}#scene{top:390px;height:88vh}.vignette{top:390px;height:88vh}.bottom-note{top:calc(390px + 88vh - 30px);padding:0 18px}#page{top:auto;left:10px;right:10px;bottom:10px;width:auto;max-height:68vh;padding:16px 17px 24px;border-radius:20px}#page.expanded{inset:7px!important;left:7px!important;right:7px!important;top:7px!important;bottom:7px!important;width:auto!important;max-height:none;padding:18px 16px 24px;border-radius:18px}#page.expanded .page-inner{margin-top:18px}#page.expanded .cards{grid-template-columns:1fr;gap:12px}#page.expanded .card{min-height:0;padding:17px}#page.expanded .card p,#page.expanded .card-summary{font-size:13px}#page.expanded .card-detail p{font-size:13px}.page-inner{margin-top:12px}h2{font-size:42px}.lead{font-size:13px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+
+.soul-video-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:18px 0 28px}
+.soul-video-card{min-width:0;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:12px}
+.soul-video-card h5{margin:0 0 9px;font-size:1rem;color:var(--ink)}
+.soul-video-card video{display:block;width:100%;max-height:260px;border-radius:9px;background:#090b12}
+.soul-video-card p{font-size:.88rem;line-height:1.5;color:var(--muted);margin:9px 0 0}
+
 </style>
 <script type="importmap">
 {"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js"}}
@@ -241,7 +248,58 @@ function goHome(){document.documentElement.classList.remove('island-open');docum
  tweenCamera(cameraStart.pos,cameraStart.target,1250,()=>{transitioning=false;selected=null})}
 function togglePanel(){const page=document.getElementById('page');page.classList.toggle('expanded');const btn=document.getElementById('expandBtn');btn.textContent=page.classList.contains('expanded')?'✕ Exit reading mode':'⤢ Read full screen'}
 document.getElementById('expandBtn').addEventListener('click',togglePanel);
-function openPage(key){const d=content[key];if(!d)return;const page=document.getElementById('page');page.classList.remove('expanded');document.getElementById('expandBtn').textContent='⤢ Read full screen';page.style.display='block';page.classList.add('show');document.getElementById('pageContent').innerHTML=`<div class="kicker">${d.k}</div><h2>${d.t}</h2><p class="lead">${d.l}</p><div class="cards">${d.c.map((c,i)=>`<article class="card expandable-card"><button class="card-toggle" type="button" aria-expanded="false" aria-controls="detail-${key}-${i}"><span><span class="num">${c[0]}</span><h3>${c[1]}</h3><span class="card-summary">${c[2]}</span><span class="card-tags">${c[3].split('•').map(x=>`<span class="tag">${x.trim()}</span>`).join('')}</span></span><span class="card-chevron" aria-hidden="true">＋</span></button><div class="card-detail" id="detail-${key}-${i}" hidden><p>${c[4]||c[2]}</p>${key==='projects'&&i===2?seaProjectGallery():''}</div></article>`).join('')}</div>`;page.querySelectorAll('.card-toggle').forEach(btn=>btn.addEventListener('click',()=>{const expanded=btn.getAttribute('aria-expanded')==='true';btn.setAttribute('aria-expanded',String(!expanded));btn.querySelector('.card-chevron').textContent=expanded?'＋':'−';btn.closest('.card').querySelector('.card-detail').hidden=expanded}));transitioning=false}
+function openPage(key){const d=content[key];if(!d)return;const page=document.getElementById('page');page.classList.remove('expanded');document.getElementById('expandBtn').textContent='⤢ Read full screen';page.style.display='block';page.classList.add('show');document.getElementById('pageContent').innerHTML=`<div class="kicker">${d.k}</div><h2>${d.t}</h2><p class="lead">${d.l}</p><div class="cards">${d.c.map((c,i)=>`<article class="card expandable-card"><button class="card-toggle" type="button" aria-expanded="false" aria-controls="detail-${key}-${i}"><span><span class="num">${c[0]}</span><h3>${c[1]}</h3><span class="card-summary">${c[2]}</span><span class="card-tags">${c[3].split('•').map(x=>`<span class="tag">${x.trim()}</span>`).join('')}</span></span><span class="card-chevron" aria-hidden="true">＋</span></button><div class="card-detail" id="detail-${key}-${i}" hidden><p>${c[4]||c[2]}</p>${key==='projects'&&i===1?soulProjectGallery():''}${key==='projects'&&i===2?seaProjectGallery():''}</div></article>`).join('')}</div>`;page.querySelectorAll('.card-toggle').forEach(btn=>btn.addEventListener('click',()=>{const expanded=btn.getAttribute('aria-expanded')==='true';btn.setAttribute('aria-expanded',String(!expanded));btn.querySelector('.card-chevron').textContent=expanded?'＋':'−';btn.closest('.card').querySelector('.card-detail').hidden=expanded}));transitioning=false}
+
+function soulProjectGallery(){
+  const base='./assets/soul-project/';
+  const images=[
+    "Screenshot 2026-01-12 135135.png",
+    "Screenshot 2026-01-13 091740-4def5efffcd2400cbb48e859ccc833b1.png",
+    "Screenshot 2026-01-13 091740.png",
+    "Screenshot 2026-01-13 092110-afedfadabf1c44b6858bc83e7b99d735.png",
+    "Screenshot 2026-01-13 092110.png",
+    "Screenshot 2026-01-13 094909.png",
+    "Screenshot 2026-01-16 150417-41b26830fb5f474fb5e265547659aa64.png",
+    "Screenshot 2026-01-16 150417.png",
+    "Screenshot 2026-01-19 141613-12bdd8d60c174e0d867363389d26db70.png",
+    "Screenshot 2026-01-19 141613.png",
+    "Screenshot 2026-01-19 141621-0b9f4dbb25b84a33a4092f68606fa66a.png",
+    "Screenshot 2026-01-19 141621.png",
+    "Screenshot 2026-01-21 115155-58dbce7071b7453fb49595cfab0d7a5d.png",
+    "Screenshot 2026-01-21 115155.png",
+    "Screenshot 2026-01-21 115200-39045223ff20471395ee2900d6610f8b.png",
+    "Screenshot 2026-01-21 115200.png",
+    "Screenshot 2026-01-21 115216-4bf5ae740f5c41beada2c6e3ef77ff2c.png",
+    "Screenshot 2026-01-21 115216.png",
+    "Screenshot 2026-01-27 101656.png",
+    "Screenshot 2026-01-28 120058.png",
+    "Screenshot 2026-02-04 114809.png",
+    "image-024c3c7880894bf390264e77a0ce3353.png",
+    "image-1cd46c148b7046a4a44183da93dee82d.png",
+    "image-38cf9ab968ab4af8bb175c71ccdf09c2.png",
+    "image-4a9d9856c7954907addde608e752ff66.png",
+    "image-4c6d74c6f0ea48098c6fce05a7642169.png",
+    "image-8902a3955e134b1d8c8d74ec7e2ad0d3.png",
+    "image-9507b5dfcf064e30834f53041837da4f.png",
+    "image-aa30c53d69b2495aa37af361e1f4a8ab.png",
+    "image-afa7ca6984d54ad99db4ff4df59f128c.png",
+    "image-be9e5f57f03b45b68368e6873a01a9d4.png",
+    "image-e22a98261ba8416ca01f2d4156bb0af5.png",
+    "image-f16ebfb869fe4e6da33698ed9a88185d.png",
+    "image.png",
+  ];
+  const label=(file)=>file.replace(/\.[^.]+$/,'').replace(/[-_]/g,' ').replace(/Screenshot /,'Screenshot · ');
+  const imageCards=images.map(file=>{const url=base+encodeURIComponent(file);return `<figure><a href="${url}" target="_blank" rel="noopener"><img src="${url}" alt="${label(file)}" loading="lazy" onerror="this.closest('figure').remove()"></a><figcaption>${label(file)}</figcaption></figure>`}).join('');
+  const videos=[
+    ['player Health debug.mp4','Player health debugging','A development recording showing a player-health issue being investigated.'],
+    ['Head bug.mp4','Character head bug','A recording of a character head issue encountered during development.'],
+    ['respawn menu.mp4','Respawn menu','A recording of the respawn menu and retry flow.'],
+    ['Becoming thing.mp4','Final playable build','A longer video showing the finished playable prototype.']
+  ];
+  const videoCards=videos.map(([file,title,caption])=>{const url=base+encodeURIComponent(file);return `<article class="soul-video-card"><h5>${title}</h5><video controls preload="metadata" playsinline><source src="${url}" type="video/mp4">Your browser does not support video playback.</video><p>${caption}</p></article>`}).join('');
+  return `<h4 class="sea-media-heading">Soul · Development evidence</h4><p>Original screenshots from the project alongside recordings of bugs encountered during development and the final playable prototype.</p><div class="soul-video-grid">${videoCards}</div><h4 class="sea-media-heading">Planning, design & development screenshots</h4><div class="sea-gallery">${imageCards}</div>`;
+}
+
 function seaProjectGallery(){
   const media=[
     ['Ship Creation.png','My pirate ship model in Blender'],
