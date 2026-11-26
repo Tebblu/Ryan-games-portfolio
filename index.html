@@ -251,7 +251,7 @@ document.getElementById('expandBtn').addEventListener('click',togglePanel);
 function openPage(key){const d=content[key];if(!d)return;const page=document.getElementById('page');page.classList.remove('expanded');document.getElementById('expandBtn').textContent='⤢ Read full screen';page.style.display='block';page.classList.add('show');document.getElementById('pageContent').innerHTML=`<div class="kicker">${d.k}</div><h2>${d.t}</h2><p class="lead">${d.l}</p><div class="cards">${d.c.map((c,i)=>`<article class="card expandable-card"><button class="card-toggle" type="button" aria-expanded="false" aria-controls="detail-${key}-${i}"><span><span class="num">${c[0]}</span><h3>${c[1]}</h3><span class="card-summary">${c[2]}</span><span class="card-tags">${c[3].split('•').map(x=>`<span class="tag">${x.trim()}</span>`).join('')}</span></span><span class="card-chevron" aria-hidden="true">＋</span></button><div class="card-detail" id="detail-${key}-${i}" hidden><p>${c[4]||c[2]}</p>${key==='projects'&&i===1?soulProjectGallery():''}${key==='projects'&&i===2?seaProjectGallery():''}</div></article>`).join('')}</div>`;page.querySelectorAll('.card-toggle').forEach(btn=>btn.addEventListener('click',()=>{const expanded=btn.getAttribute('aria-expanded')==='true';btn.setAttribute('aria-expanded',String(!expanded));btn.querySelector('.card-chevron').textContent=expanded?'＋':'−';btn.closest('.card').querySelector('.card-detail').hidden=expanded}));transitioning=false}
 
 function soulProjectGallery(){
-  const base='./assets/soul-project/';
+  const base='./assets/Soul-Project/';
   const images=[
     "Screenshot 2026-01-12 135135.png",
     "Screenshot 2026-01-13 091740-4def5efffcd2400cbb48e859ccc833b1.png",
@@ -320,7 +320,7 @@ function seaProjectGallery(){
     ['WaveStuff.png','Wave and ocean setup']
   ];
   const base='./assets/sea-project/';
-  return `<h4 class="sea-media-heading">Floating at Sea · Development gallery</h4><div class="sea-gallery">${media.map(([file,caption])=>{const url=base+encodeURIComponent(file);return `<figure><a href="${url}" target="_blank" rel="noopener"><img src="${url}" alt="${caption}" loading="lazy" onerror="this.closest('figure').remove()"></a><figcaption>${caption}</figcaption></figure>`}).join('')}</div><video class="sea-video" controls preload="metadata"><source src="${base}Water%20video%20MK1.mp4" type="video/mp4">Your browser does not support the video element.</video><p>Original development screenshots and water test video. Images are displayed from the supplied files without editing.</p>`
+  return `<h4 class="sea-media-heading">Floating at Sea · Development gallery</h4><div class="sea-gallery">${media.map(([file,caption])=>{const url=base+encodeURIComponent(file);return `<figure><a href="${url}" target="_blank" rel="noopener"><img src="${url}" alt="${caption}" loading="lazy" onerror="this.closest('figure').remove()"></a><figcaption>${caption}</figcaption></figure>`}).join('')}</div><video class="sea-video" controls preload="metadata" playsinline><source src="${base}water-video-mk1.mp4" type="video/mp4">Your browser does not support the video element. If it does not load, check that assets/sea-project/water-video-mk1.mp4 was uploaded.</video><p>Original development screenshots and water test video. Images are displayed from the supplied files without editing.</p>`
 }
 window.openPage=(key)=>{if(key==='about'||key==='projects'){const found=islands.find(i=>i.userData.key===key);if(found)flyTo(found)}};
 window.goHome=goHome;
